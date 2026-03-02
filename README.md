@@ -29,7 +29,15 @@ A robust, horizontally scalable webhook processing system designed to handle hig
 
 ```bash
 # Start Redis and PostgreSQL  
-docker-compose up -d
+docker run --name webhook-redis -p 6379:6379 -d redis
+docker run -d \
+  --name postgres-db \
+  -e POSTGRES_DB="" \
+  -e POSTGRES_USER="" \
+  -e POSTGRES_PASSWORD="" \
+  -p 5432:5432 \
+  postgres:16
+
 ```
 
 ### 3. Server Configuration
@@ -38,17 +46,20 @@ Update your .env with PORT=8000 and your database credentials.
 
 ```bash
 cd server  
-npm install  
+pnpm install  
 # Run API and Worker simultaneously using concurrently  
-npm run dev
+pnpm run dev
+
+# Run the script
+pnpm run test:load
 ```
 
 ### 4. Dashboard Setup
 
 ```bash
 cd dashboard  
-npm install  
-npm run dev
+pnpm install  
+pnpm run dev
 ```
 
 ## Core Logic Snippets
@@ -100,17 +111,13 @@ const worker = new Worker("webhook-events", async (job) => {
 }, { connection: redisConnection as any, concurrency: 5 });
 ```
 
-## Testing and Observability
 
-### Load Testing
-
-Fire 500 events with intentional duplicates and validation errors:  
-
-```bash
-npm run test:load
-```
 ## Scaling Roadmap (V2)
+If got more time i would have implemented other bonus parts.
 
 * OLAP Integration: Migrating time-series aggregations to ClickHouse using a dual-write or CDC pattern to handle millions of events without locking PostgreSQL.  
 * Edge Ingestion: Moving the ingestion layer to Cloudflare Workers + Cloudflare Queues to reduce global latency.  
 * Dead-Letter Replay: Implementing a manual "Replay" utility to re-queue failed events directly from the event_failures table.
+* Made everything in websockets
+* implemented batching in queue
+* made better folder structure in frontend breaking everything in components and better state manangements
