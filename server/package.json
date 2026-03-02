@@ -8,7 +8,7 @@
     "test:load": "ts-node src/script/script.ts",
     "develop": "ts-node-dev --respawn --transpile-only src/server.ts",
     "worker": "ts-node-dev --respawn --transpile-only src/worker/worker.ts",
-    "dev": "concurrently \"npm run develop\" \"npm run worker\""
+    "dev": "concurrently \"pnpm run develop\" \"pnpm run worker\""
   },
   "keywords": [],
   "author": "",
