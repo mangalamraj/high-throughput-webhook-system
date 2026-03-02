@@ -42,7 +42,19 @@ docker run -d \
 
 ### 3. Server Configuration
 
-Update your .env with PORT=8000 and your database credentials.  
+ENV for server
+```bash
+PORT=8000
+
+PG_DATABASE=
+PG_USER=
+PG_PASSWORD=
+PG_HOST=
+PG_PORT=
+
+```
+
+your database credentials.  
 
 ```bash
 cd server  
