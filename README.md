@@ -4,12 +4,12 @@ A robust, horizontally scalable webhook processing system designed to handle hig
 
 ## Architecture and Design Decisions
 
-* Asynchronous Processing: Uses BullMQ (Redis) to decouple the ingestion "Hot Path" from database persistence. This ensures that even if PostgreSQL experiences latency, the API remains responsive.  
-* Layered Idempotency: Prevents duplicate processing using a two-tier defense:  
-  * Queue Level: BullMQ jobId deduplication.  
+* Asynchronous Processing: Uses BullMQ (Redis) to move heavy database work to the background. This means the API replies fast, even if PostgreSQL is slow.
+* Double Protection from Duplicates: Stops the same data from being processed twice using two checks:
+  * Queue Level: BullMQ blocks duplicate jobs using a unique jobId. 
   * Database Level: PostgreSQL ON CONFLICT DO NOTHING.  
 * Fault Tolerance: Implements Exponential Backoff (5 attempts) for failed jobs.  
-* Async Error Logging: Validation failures are pushed to the queue asynchronously as log-validation-error jobs. This maintains low API latency, ensuring that the "Hot Path" is never blocked by slow I/O operations.
+* Non-Blocking Error Logging: Validation errors are sent to the queue as separate log jobs. This keeps the API fast and ensures the main request is never slowed down by logging or database work.
 <img width="1152" height="182" alt="Screenshot 2026-03-02 at 22 33 47" src="https://github.com/user-attachments/assets/6985e2b8-90e0-4c29-990b-a430e671cd89" />
 
 ## Tech Stack
