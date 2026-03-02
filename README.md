@@ -17,7 +17,7 @@ A robust, horizontally scalable webhook processing system designed to handle hig
 * Validation: Zod (Strict schema enforcement).  
 * Queueing: BullMQ + Redis.  
 * Database: PostgreSQL (OLTP) with an evolution path to ClickHouse for OLAP scaling.  
-* Frontend: React, Tailwind CSS, Shadcn/UI, Recharts.
+* Frontend: Nextjs, Tailwind CSS, Shadcn/UI, Recharts.
 
 ## Getting Started
 ### 1. Prerequisites
