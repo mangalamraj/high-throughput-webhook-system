@@ -10,6 +10,7 @@ A robust, horizontally scalable webhook processing system designed to handle hig
   * Database Level: PostgreSQL ON CONFLICT DO NOTHING.  
 * Fault Tolerance: Implements Exponential Backoff (5 attempts) for failed jobs.  
 * Async Error Logging: Validation failures are pushed to the queue asynchronously as log-validation-error jobs. This maintains low API latency, ensuring that the "Hot Path" is never blocked by slow I/O operations.
+<img width="1152" height="182" alt="Screenshot 2026-03-02 at 22 33 47" src="https://github.com/user-attachments/assets/6985e2b8-90e0-4c29-990b-a430e671cd89" />
 
 ## Tech Stack
 
