@@ -17,7 +17,7 @@ A robust, horizontally scalable webhook processing system designed to handle hig
 * Backend: Node.js, Express, TypeScript.  
 * Validation: Zod (Strict schema enforcement).  
 * Queueing: BullMQ + Redis.  
-* Database: PostgreSQL (OLTP) with an evolution path to ClickHouse for OLAP scaling.  
+* Database: PostgreSQL
 * Frontend: Nextjs, Tailwind CSS, Shadcn/UI, Recharts.
 
 ## Getting Started
