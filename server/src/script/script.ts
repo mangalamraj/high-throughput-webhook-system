@@ -33,6 +33,14 @@ async function runTest() {
         payload: {
           orderId: `ORD-${index}`,
           status: "testing",
+          metadata: {
+            source: "load-tester",
+            environment: "local",
+            retryCount: 0,
+            ipAddress: "127.0.0.1",
+            userAgent: "axios",
+            correlationId: `corr-${eventId}`,
+          },
         },
       });
     } catch (e: any) {
