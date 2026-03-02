@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/server.js",
+    "test:load": "ts-node src/script/script.ts",
     "develop": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "start": "node dist/server.js"
+    "worker": "ts-node-dev --respawn --transpile-only src/worker/worker.ts",
+    "dev": "concurrently \"npm run develop\" \"npm run worker\""
   },
   "keywords": [],
   "author": "",
@@ -16,9 +18,12 @@
     "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.6",
     "@types/pg": "^8.18.0",
+    "axios": "^1.13.6",
+    "bullmq": "^5.70.1",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "ioredis": "^5.10.0",
     "pg": "^8.19.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3",

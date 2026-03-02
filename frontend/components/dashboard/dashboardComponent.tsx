@@ -26,11 +26,37 @@ import { Activity, CheckCircle, AlertCircle, Clock } from "lucide-react";
 
 const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
 
+interface TimeSeriesPoint {
+  minute: string;
+  count: number;
+}
+
+interface BreakdownItem {
+  type: string;
+  count: number;
+}
+
+interface FailureItem {
+  id: string;
+  eventId: string;
+  reason: string;
+  timestamp: string;
+}
+
+interface WebhookStats {
+  received: number;
+  processed: number;
+  failed: number;
+  timeSeries: TimeSeriesPoint[];
+  breakdown: BreakdownItem[];
+  recentFailures: FailureItem[];
+}
+
 export default function WebhookDashboard() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<WebhookStats | null>(null);
   const [error, setError] = useState(false);
 
-  const API_URL = "http://localhost:8000/api/stats";
+  const API_URL = "http://localhost:8000/api/v1/stats";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,7 +167,7 @@ export default function WebhookDashboard() {
                 <YAxis fontSize={10} />
                 <Tooltip />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                  {data.breakdown.map((_: any, i: number) => (
+                  {data.breakdown.map((_, i) => (
                     <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Bar>
@@ -158,52 +184,55 @@ export default function WebhookDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Event ID</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Reason</TableHead>
-                <TableHead className="text-right">Time</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.recentFailures.length > 0 ? (
-                data.recentFailures.map((f: any) => (
-                  <TableRow key={f.id}>
-                    <TableCell className="font-mono text-xs text-slate-600">
-                      {f.eventId}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">{f.type}</Badge>
-                    </TableCell>
-                    <TableCell className="text-red-500 text-xs font-medium">
-                      {f.reason}
-                    </TableCell>
-                    <TableCell className="text-right text-slate-400 text-xs">
-                      {f.timestamp}
+          <div className="rounded-md border h-[300px] overflow-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Event ID</TableHead>
+                  <TableHead>Reason</TableHead>
+                  <TableHead className="text-right">Time</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="overflow-y-scroll">
+                {data.recentFailures.length > 0 ? (
+                  data.recentFailures.map((f) => (
+                    <TableRow key={f.id}>
+                      <TableCell className="font-mono text-xs text-slate-600">
+                        {f.eventId}
+                      </TableCell>
+                      <TableCell className="text-red-500 text-xs font-medium">
+                        {f.reason}
+                      </TableCell>
+                      <TableCell className="text-right text-slate-400 text-xs">
+                        {f.timestamp}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={4}
+                      className="text-center py-4 text-slate-400"
+                    >
+                      No failures detected.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    className="text-center py-4 text-slate-400"
-                  >
-                    No failures detected.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
   );
 }
+interface MetricCardProps {
+  title: string;
+  value: number;
+  icon: React.ReactNode;
+}
 
-function MetricCard({ title, value, icon }: any) {
+function MetricCard({ title, value, icon }: MetricCardProps) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
