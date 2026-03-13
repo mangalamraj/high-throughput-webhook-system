@@ -188,8 +188,6 @@ const worker = new Worker("webhook-events", async (job) => {
 
 
 ## Scaling Roadmap (V2)
-If got more time i would have implemented other bonus parts.
-
 * OLAP Integration: Migrating time-series aggregations to ClickHouse using a dual-write or CDC pattern to handle millions of events without locking PostgreSQL.  
 * Edge Ingestion: Moving the ingestion layer to Cloudflare Workers + Cloudflare Queues to reduce global latency.  
 * Dead-Letter Replay: Implementing a manual "Replay" utility to re-queue failed events directly from the event_failures table.
